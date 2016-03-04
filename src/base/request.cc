@@ -348,6 +348,11 @@ void request::run(int timeout_in_s)
       request_size += header.size();
     }
 
+    // Inhibit append "Expect: 100-continue" header. (Recent libcurl appends it automatically.)
+    string header = "Expect:";
+    headers.append(header.c_str());
+    request_size += header.size();
+
     TEST_OK(curl_easy_setopt(_curl, CURLOPT_HTTPHEADER, headers.get()));
 
     if (_input_buffer)
