@@ -1,5 +1,5 @@
 name=s3fuse
-version=0.16
+version=0.17
 top_dir=$(shell pwd | sed 's/ /\\ /g')
 
 all: clean dist rpm
