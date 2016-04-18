@@ -57,9 +57,9 @@ using s3::fs::symlink;
 namespace
 {
   atomic_count s_reopen_attempts(0), s_reopen_rescues(0), s_reopen_fails(0);
-  atomic_count s_rename_attempts(0), s_rename_fails(0);
+  atomic_count s_rename_attempts(0), s_rename_fails(0), s_operation_fails(0);
   atomic_count s_create(0), s_mkdir(0), s_mknod(0), s_open(0), s_rename(0), s_symlink(0), s_truncate(0), s_unlink(0);
-  atomic_count s_getattr(0), s_readdir(0), s_readlink(0);
+  atomic_count s_getattr(0), s_readdir(0), s_readlink(0), s_strict_check_retry(0);
 
   void dir_filler(fuse_fill_dir_t filler, void *buf, const std::string &path)
   {
@@ -106,6 +106,7 @@ namespace
       "  reopens failed: " << s_reopen_fails << "\n"
       "  rename attempts: " << s_rename_attempts << "\n"
       "  renames failed: " << s_rename_fails << "\n"
+      "  operation failed: " << s_operation_fails << "\n"
       "operations (modifiers):\n"
       "  create: " << s_create << "\n"
       "  mkdir: " << s_mkdir << "\n"
@@ -118,7 +119,8 @@ namespace
       "operations (accessors):\n"
       "  getattr: " << s_getattr << "\n"
       "  readdir: " << s_readdir << "\n"
-      "  readlink: " << s_readlink << "\n";
+      "  readlink: " << s_readlink << "\n"
+      "  strict_check_retry: " << s_strict_check_retry << "\n";
   }
 
   int s_mountpoint_mode = 0;
@@ -164,9 +166,11 @@ namespace
 #define END_TRY \
   } catch (const std::exception &e) { \
     S3_LOG(LOG_WARNING, "END_TRY", "caught exception: %s (at line %i)\n", e.what(), __LINE__); \
+    ++s_operation_fails; \
     return -ECANCELED; \
   } catch (...) { \
     S3_LOG(LOG_WARNING, "END_TRY", "caught unknown exception (at line %i)\n", __LINE__); \
+    ++s_operation_fails; \
     return -ECANCELED; \
   }
 
@@ -245,6 +249,22 @@ void operations::build_fuse_operations(fuse_operations *ops)
   ops->unlink = operations::unlink;
   ops->utimens = operations::utimens;
   ops->write = operations::write;
+}
+
+void operations::strict_check(const char *path)
+{
+  if (!(config::get_service() == "iijgio" && config::get_iijgio_strict_check() == true)) {
+    return;
+  }
+
+  struct stat s;
+
+  for (int retry_cnt = 0; retry_cnt < 3;retry_cnt++) {
+    if (getattr(path, &s) == 0) {
+      break;
+    }
+    ++s_strict_check_retry;
+  }
 }
 
 int operations::chmod(const char *path, mode_t mode)
@@ -450,7 +470,7 @@ int operations::listxattr(const char *path, char *buffer, size_t size)
 int operations::mkdir(const char *path, mode_t mode)
 {
   const fuse_context *ctx = fuse_get_context();
-
+  const char *path_org = path;
   S3_LOG(LOG_DEBUG, "mkdir", "path: %s, mode: %#o\n", path, mode);
   ++s_mkdir;
 
@@ -459,6 +479,7 @@ int operations::mkdir(const char *path, mode_t mode)
   BEGIN_TRY;
     directory::ptr dir;
     string parent = get_parent(path);
+    int ret_val;
 
     if (cache::get(path)) {
       S3_LOG(LOG_WARNING, "mkdir", "attempt to overwrite object at [%s]\n", path);
@@ -475,7 +496,11 @@ int operations::mkdir(const char *path, mode_t mode)
 
     RETURN_ON_ERROR(dir->commit());
 
-    return touch(parent);
+    ret_val = touch(parent);
+
+    strict_check(path_org); // retry stat until success (max: 3 times)
+
+    return ret_val;
   END_TRY;
 }
 

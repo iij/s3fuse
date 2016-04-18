@@ -349,7 +349,7 @@ void request::run(int timeout_in_s)
     }
 
     // Inhibit append "Expect: 100-continue" header. (Recent libcurl appends it automatically.)
-    if (config::get_iijgio_remove_expext_header()) {
+    if (config::get_remove_expext_header()) {
       string header = "Expect:";
       headers.append(header.c_str());
       request_size += header.size();
