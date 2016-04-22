@@ -253,7 +253,7 @@ void operations::build_fuse_operations(fuse_operations *ops)
 
 void operations::strict_check(const char *path)
 {
-  if (!(config::get_service() == "iijgio" && config::get_iijgio_strict_check() == true)) {
+  if (!(config::get_service() == "iijgio")) {
     return;
   }
 
