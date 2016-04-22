@@ -669,6 +669,14 @@ int operations::removexattr(const char *path, const char *name)
 
   ASSERT_VALID_PATH(path);
 
+  if (config::get_nfs_support()) {
+    if (strcmp(name, "security.capability") == 0 ||
+        strcmp(name, "system.posix_acl_access") == 0 ||
+        strcmp(name, "system.posix_acl_default") == 0) {
+      return 0;
+    }
+  }
+
   BEGIN_TRY;
     GET_OBJECT(obj, path);
 
