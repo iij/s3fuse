@@ -59,7 +59,10 @@ namespace
   atomic_count s_reopen_attempts(0), s_reopen_rescues(0), s_reopen_fails(0);
   atomic_count s_rename_attempts(0), s_rename_fails(0), s_operation_fails(0);
   atomic_count s_create(0), s_mkdir(0), s_mknod(0), s_open(0), s_rename(0), s_symlink(0), s_truncate(0), s_unlink(0);
-  atomic_count s_getattr(0), s_readdir(0), s_readlink(0), s_strict_check_retry(0);
+  atomic_count s_getattr(0), s_readdir(0), s_readlink(0), s_ftruncate(0);
+  atomic_count s_flush(0), s_release(0), s_fsync(0), s_getxattr(0), s_listxattr(0);
+  atomic_count s_removexattr(0), s_setxattr(0);
+  atomic_count s_strict_check_retry(0);
 
   void dir_filler(fuse_fill_dir_t filler, void *buf, const std::string &path)
   {
@@ -109,17 +112,26 @@ namespace
       "  operation failed: " << s_operation_fails << "\n"
       "operations (modifiers):\n"
       "  create: " << s_create << "\n"
+      "  ftruncate: " << s_ftruncate << "\n"
       "  mkdir: " << s_mkdir << "\n"
       "  mknod: " << s_mknod << "\n"
       "  open: " << s_open << "\n"
+      "  removexattr: " << s_removexattr << "\n"
       "  rename: " << s_rename << "\n"
+      "  setxattr: " << s_setxattr << "\n"
       "  symlink: " << s_symlink << "\n"
       "  truncate: " << s_truncate << "\n"
       "  unlink: " << s_unlink << "\n"
       "operations (accessors):\n"
       "  getattr: " << s_getattr << "\n"
+      "  getxattr: " << s_getxattr << "\n"
+      "  listxattr: " << s_listxattr << "\n"
       "  readdir: " << s_readdir << "\n"
       "  readlink: " << s_readlink << "\n"
+      "operations (others):\n"
+      "  flush: " << s_flush << "\n"
+      "  fsync: " << s_fsync << "\n"
+      "  release: " << s_release << "\n"
       "  strict_check_retry: " << s_strict_check_retry << "\n";
   }
 
@@ -249,6 +261,7 @@ void operations::build_fuse_operations(fuse_operations *ops)
   ops->unlink = operations::unlink;
   ops->utimens = operations::utimens;
   ops->write = operations::write;
+  ops->fsync = operations::fsync;
 }
 
 void operations::strict_check(const char *path)
@@ -366,6 +379,8 @@ int operations::create(const char *path, mode_t mode, fuse_file_info *file_info)
 
 int operations::flush(const char *path, fuse_file_info *file_info)
 {
+  ++s_flush;
+
   file *f = file::from_handle(file_info->fh);
 
   S3_LOG(LOG_DEBUG, "flush", "path: %s\n", f->get_path().c_str());
@@ -377,6 +392,8 @@ int operations::flush(const char *path, fuse_file_info *file_info)
 
 int operations::ftruncate(const char *path, off_t offset, fuse_file_info *file_info)
 {
+  ++s_ftruncate;
+
   file *f = file::from_handle(file_info->fh);
 
   S3_LOG(LOG_DEBUG, "ftruncate", "path: %s, offset: %ji\n", f->get_path().c_str(), static_cast<intmax_t>(offset));
@@ -426,7 +443,23 @@ int operations::getxattr(const char *path, const char *name, char *buffer, size_
 int operations::getxattr(const char *path, const char *name, char *buffer, size_t max_size)
 #endif
 {
+  S3_LOG(LOG_DEBUG, "getxattr", "path: %s, name: %s\n", path, name);
+
+  ++s_getxattr;
+
   ASSERT_VALID_PATH(path);
+
+  if (config::get_nfs_support()) {
+    if (strcmp(name, "security.capability") == 0 ||
+        strcmp(name, "system.posix_acl_access") == 0 ||
+        strcmp(name, "system.posix_acl_default") == 0) {
+#ifdef EOPNOTSUPP
+      return EOPNOTSUPP;
+#else
+      return ENOTSUP;
+#endif
+    }
+  }
 
   BEGIN_TRY;
     GET_OBJECT(obj, path);
@@ -440,6 +473,8 @@ int operations::listxattr(const char *path, char *buffer, size_t size)
   typedef vector<string> str_vec;
 
   ASSERT_VALID_PATH(path);
+
+  ++s_listxattr;
 
   BEGIN_TRY;
     GET_OBJECT(obj, path);
@@ -612,6 +647,8 @@ int operations::readlink(const char *path, char *buffer, size_t max_size)
 
 int operations::release(const char *path, fuse_file_info *file_info)
 {
+  ++s_release;
+
   file *f = file::from_handle(file_info->fh);
 
   S3_LOG(LOG_DEBUG, "release", "path: %s\n", f->get_path().c_str());
@@ -624,8 +661,17 @@ int operations::release(const char *path, fuse_file_info *file_info)
 int operations::removexattr(const char *path, const char *name)
 {
   S3_LOG(LOG_DEBUG, "removexattr", "path: %s, name: %s\n", path, name);
+  ++s_removexattr;
 
   ASSERT_VALID_PATH(path);
+
+  if (config::get_nfs_support()) {
+    if (strcmp(name, "security.capability") == 0 ||
+        strcmp(name, "system.posix_acl_access") == 0 ||
+        strcmp(name, "system.posix_acl_default") == 0) {
+      return 0;
+    }
+  }
 
   BEGIN_TRY;
     GET_OBJECT(obj, path);
@@ -703,8 +749,17 @@ int operations::setxattr(const char *path, const char *name, const char *value, 
 #endif
 {
   S3_LOG(LOG_DEBUG, "setxattr", "path: [%s], name: [%s], size: %i\n", path, name, size);
+  ++s_setxattr;
 
   ASSERT_VALID_PATH(path);
+
+  if (config::get_nfs_support()) {
+    if (strcmp(name, "security.capability") == 0 ||
+        strcmp(name, "system.posix_acl_access") == 0 ||
+        strcmp(name, "system.posix_acl_default") == 0) {
+      return 0;
+    }
+  }
 
   BEGIN_TRY;
     bool needs_commit = false;
@@ -845,5 +900,19 @@ int operations::write(const char *path, const char *buffer, size_t size, off_t o
 {
   BEGIN_TRY;
     return file::from_handle(file_info->fh)->write(buffer, size, offset);
+  END_TRY;
+}
+
+int operations::fsync(const char *path, int datasync, fuse_file_info *file_info)
+{
+  S3_LOG(LOG_DEBUG, "fsync", "path: %s, datasync: %d\n", path, datasync);
+  ++s_fsync;
+
+  file *f = file::from_handle(file_info->fh);
+
+  S3_LOG(LOG_DEBUG, "flush", "path: %s\n", f->get_path().c_str());
+
+  BEGIN_TRY;
+    return f->flush();
   END_TRY;
 }

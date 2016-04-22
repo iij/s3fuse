@@ -74,6 +74,7 @@ namespace s3
     static int unlink(const char *path);
     static int utimens(const char *path, const timespec times[2]);
     static int write(const char *path, const char *buffer, size_t size, off_t offset, fuse_file_info *file_info);
+    static int fsync(const char *path, int datasync, fuse_file_info *file_info);
   };
 }
 
