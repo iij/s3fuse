@@ -45,7 +45,6 @@ CONFIG_CONSTRAINT(CONFIG_KEY(bucket_name).size() > 0, "bucket_name must be speci
   CONFIG(std::string, iijgio_secret_file, "", "path to file containing IIJ GIO storage and analysis Access Key ID followed by a space followed by IIJ GIO storage and analysis Secret Access Key; file must not be group- or world-readable or -writable");
   CONFIG(std::string, iijgio_service_endpoint, "storage-dag.iijgio.com", "service endpoint for IIJ GIO storage and analysis");
   CONFIG(bool, iijgio_use_ssl, true, "set to 'no'/'false' to disable SSL");
-  CONFIG(bool, iijgio_strict_check, true, "set to 'no'/'false' to disable strict check");
 #endif
 
 CONFIG_SECTION("Encryption");
