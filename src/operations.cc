@@ -507,6 +507,7 @@ int operations::mkdir(const char *path, mode_t mode)
   const fuse_context *ctx = fuse_get_context();
   const char *path_org = path;
   S3_LOG(LOG_DEBUG, "mkdir", "path: %s, mode: %#o\n", path, mode);
+
   ++s_mkdir;
 
   ASSERT_VALID_PATH(path);
@@ -544,6 +545,7 @@ int operations::mknod(const char *path, mode_t mode, dev_t dev)
   const fuse_context *ctx = fuse_get_context();
 
   S3_LOG(LOG_DEBUG, "mknod", "path: %s, mode: %#o, dev: %i\n", path, mode, dev);
+
   ++s_mknod;
 
   ASSERT_VALID_PATH(path);
@@ -577,6 +579,7 @@ int operations::mknod(const char *path, mode_t mode, dev_t dev)
 int operations::open(const char *path, fuse_file_info *file_info)
 {
   S3_LOG(LOG_DEBUG, "open", "path: %s\n", path);
+
   ++s_open;
 
   ASSERT_VALID_PATH(path);
@@ -621,6 +624,7 @@ int operations::readdir(const char *path, void *buf, fuse_fill_dir_t filler, off
 int operations::readlink(const char *path, char *buffer, size_t max_size)
 {
   S3_LOG(LOG_DEBUG, "readlink", "path: %s, max_size: %zu\n", path, max_size);
+
   ++s_readlink;
 
   ASSERT_VALID_PATH(path);
@@ -661,6 +665,7 @@ int operations::release(const char *path, fuse_file_info *file_info)
 int operations::removexattr(const char *path, const char *name)
 {
   S3_LOG(LOG_DEBUG, "removexattr", "path: %s, name: %s\n", path, name);
+
   ++s_removexattr;
 
   ASSERT_VALID_PATH(path);
@@ -685,6 +690,7 @@ int operations::removexattr(const char *path, const char *name)
 int operations::rename(const char *from, const char *to)
 {
   S3_LOG(LOG_DEBUG, "rename", "from: %s, to: %s\n", from, to);
+
   ++s_rename;
 
   ASSERT_VALID_PATH(from);
@@ -749,6 +755,7 @@ int operations::setxattr(const char *path, const char *name, const char *value, 
 #endif
 {
   S3_LOG(LOG_DEBUG, "setxattr", "path: [%s], name: [%s], size: %i\n", path, name, size);
+
   ++s_setxattr;
 
   ASSERT_VALID_PATH(path);
@@ -795,6 +802,7 @@ int operations::symlink(const char *target, const char *path)
   const fuse_context *ctx = fuse_get_context();
 
   S3_LOG(LOG_DEBUG, "symlink", "path: %s, target: %s\n", path, target);
+
   ++s_symlink;
 
   ASSERT_VALID_PATH(path);
@@ -829,6 +837,7 @@ int operations::truncate(const char *path, off_t size)
   uint64_t handle;
 
   S3_LOG(LOG_DEBUG, "truncate", "path: %s, size: %ji\n", path, static_cast<intmax_t>(size));
+
   ++s_truncate;
 
   ASSERT_VALID_PATH(path);
@@ -864,6 +873,7 @@ int operations::truncate(const char *path, off_t size)
 int operations::unlink(const char *path)
 {
   S3_LOG(LOG_DEBUG, "unlink", "path: %s\n", path);
+
   ++s_unlink;
 
   ASSERT_VALID_PATH(path);
@@ -906,6 +916,7 @@ int operations::write(const char *path, const char *buffer, size_t size, off_t o
 int operations::fsync(const char *path, int datasync, fuse_file_info *file_info)
 {
   S3_LOG(LOG_DEBUG, "fsync", "path: %s, datasync: %d\n", path, datasync);
+
   ++s_fsync;
 
   file *f = file::from_handle(file_info->fh);
