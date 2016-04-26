@@ -1,4 +1,4 @@
-#!/bin/sh -xe
+#!/bin/bash -xe
 
 echo "check dir"
 ls $1 || exit 1 

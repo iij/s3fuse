@@ -262,6 +262,7 @@ void operations::build_fuse_operations(fuse_operations *ops)
   ops->utimens = operations::utimens;
   ops->write = operations::write;
   ops->fsync = operations::fsync;
+  ops->fsyncdir = operations::fsync;
 }
 
 void operations::strict_check(const char *path)
@@ -918,6 +919,10 @@ int operations::fsync(const char *path, int datasync, fuse_file_info *file_info)
   S3_LOG(LOG_DEBUG, "flush", "path: %s\n", f->get_path().c_str());
 
   BEGIN_TRY;
-    return f->flush();
+    if (!datasync) {
+      return f->flush();
+    } else {
+      return 0;
+    }
   END_TRY;
 }

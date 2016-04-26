@@ -121,7 +121,7 @@ fi
 # ファイルのchmodできるかどうか
 STEP="11"; echo "test ${STEP}" ; date
 chmod 666 ${MVDATADIR}/test
-if [ "$(ls -l ${MVDATADIR}/test | awk '{ print $1 }')" != "-rw-rw-rw-" ]; then
+if [ "$(ls -l ${MVDATADIR}/test | awk '{ print $1 }')" != "-rw-rw-rw-." ]; then
     echo "error ${STEP}"
     exit 1
 fi
@@ -165,7 +165,7 @@ fi
 # ディレクトリのchmodできるかどうか
 STEP="15"; echo "test ${STEP}" ; date
 chmod 777 ${DATADIR}/dir_test
-if [ "$(ls -al ${DATADIR}/dir_test | grep " \.$" | awk '{ print $1 }')" != "drwxrwxrwx" ]; then
+if [ "$(ls -al ${DATADIR}/dir_test | grep " \.$" | awk '{ print $1 }')" != "drwxrwxrwx." ]; then
     echo "error ${STEP}"
 #    exit 1
 fi
