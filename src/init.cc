@@ -86,7 +86,7 @@ namespace
     req->set_hook(service::get_request_hook());
     r = reader->read(req, &list, NULL);
     if (r)
-      throw runtime_error("unable to list bocket contents. check bucket name and credentials.");
+      throw runtime_error("unable to list bucket contents. check bucket name and credentials.");
 
     while (retry_count++ < BUCKET_TEST_MAX_RETRIES) {
       string rand_url = object::build_internal_url(string("bucket_test_") + buffer::generate(BUCKET_TEST_ID_LEN)->to_string());
