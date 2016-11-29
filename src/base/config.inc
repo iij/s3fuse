@@ -32,6 +32,7 @@ CONFIG_CONSTRAINT(CONFIG_KEY(bucket_name).size() > 0, "bucket_name must be speci
   CONFIG(std::string, aws_secret_file, "", "path to file containing AWS Access Key ID followed by a space followed by AWS Secret Access Key; file must not be group- or world-readable or -writable");
   CONFIG(std::string, aws_service_endpoint, "s3.amazonaws.com", "service endpoint for Amazon AWS (change to 's3-eu-west-1.amazonaws.com' for EU buckets)");
   CONFIG(bool, aws_use_ssl, true, "set to 'no'/'false' to disable SSL");
+  CONFIG(bool, aws_ssl_skip_verify, false, "set to 'yes'/'true' to skip SSL verify");
 #endif
 
 #ifdef WITH_GS
@@ -45,6 +46,7 @@ CONFIG_CONSTRAINT(CONFIG_KEY(bucket_name).size() > 0, "bucket_name must be speci
   CONFIG(std::string, iijgio_secret_file, "", "path to file containing IIJ GIO storage and analysis Access Key ID followed by a space followed by IIJ GIO storage and analysis Secret Access Key; file must not be group- or world-readable or -writable");
   CONFIG(std::string, iijgio_service_endpoint, "storage-dag.iijgio.com", "service endpoint for IIJ GIO storage and analysis");
   CONFIG(bool, iijgio_use_ssl, true, "set to 'no'/'false' to disable SSL");
+  CONFIG(bool, iijgio_ssl_skip_verify, false, "set to 'yes'/'true' to skip SSL verify");
 #endif
 
 CONFIG_SECTION("Encryption");

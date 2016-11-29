@@ -31,6 +31,7 @@
 #include "request_hook.h"
 #include "statistics.h"
 #include "timer.h"
+#include "services/service.h"
 
 using boost::mutex;
 using boost::detail::atomic_count;
@@ -43,6 +44,7 @@ using std::string;
 using s3::base::request;
 using s3::base::statistics;
 using s3::base::timer;
+using s3::services::service;
 
 #define TEST_OK(x) do { if ((x) != CURLE_OK) throw runtime_error("call to " #x " failed."); } while (0)
 
@@ -225,6 +227,7 @@ request::request()
   TEST_OK(curl_easy_setopt(_curl, CURLOPT_SEEKDATA, this));
   TEST_OK(curl_easy_setopt(_curl, CURLOPT_DNS_CACHE_TIMEOUT, config::get_dns_cache()));
   TEST_OK(curl_easy_setopt(_curl, CURLOPT_USERAGENT, USER_AGENT.c_str()));
+  TEST_OK(curl_easy_setopt(_curl, CURLOPT_SSL_VERIFYPEER, !(service::get_ssl_skip_verify())));
 }
 
 request::~request()

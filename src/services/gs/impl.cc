@@ -244,3 +244,8 @@ shared_ptr<file_transfer> impl::build_file_transfer()
 {
   return shared_ptr<file_transfer>(new gs::file_transfer());
 }
+
+bool impl::get_ssl_skip_verify()
+{
+    return false;
+}

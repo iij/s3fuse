@@ -46,6 +46,7 @@ namespace s3
 
       inline static const std::string & get_bucket_url() { return s_impl->get_bucket_url(); }
 
+      inline static bool get_ssl_skip_verify() { return s_impl->get_ssl_skip_verify(); }
       inline static bool is_next_marker_supported() { return s_impl->is_next_marker_supported(); }
 
       inline static base::request_hook * get_request_hook() { return s_hook.get(); }
