@@ -13,6 +13,7 @@ libs3fuse_base_a_SOURCES = \
 	config.inc \
 	curl_easy_handle.cc \
 	curl_easy_handle.h \
+	impl.h \
 	logger.cc \
 	logger.h \
 	lru_cache_map.h \
@@ -23,6 +24,7 @@ libs3fuse_base_a_SOURCES = \
 	request_hook.h \
 	s3fuse.conf.awk \
 	s3fuse.conf.pp \
+	service.h \
 	static_list.h \
 	statistics.cc \
 	statistics.h \
