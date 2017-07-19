@@ -2,7 +2,7 @@ SUBDIRS = base crypto fs services threads .
 DIST_SUBDIRS = $(SUBDIRS) tests
 
 if BUILD_TESTS
-SUBDIRS += tests
+SUBDIRS += base/tests tests
 endif
 
 service_libs =

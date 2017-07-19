@@ -1,4 +1,4 @@
-noinst_LIBRARIES = libs3fuse_services_iijgio.a
+noinst_LTLIBRARIES = libs3fuse_services_iijgio.a
 
 libs3fuse_services_iijgio_a_SOURCES = \
 	file_transfer.cc \
