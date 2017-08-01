@@ -5,9 +5,9 @@ if BUILD_TESTS
 SUBDIRS += tests
 endif
 
-noinst_LTLIBRARIES = libs3fuse_threads.a
+noinst_LTLIBRARIES = libs3fuse_threads.la
 
-libs3fuse_threads_a_SOURCES = \
+libs3fuse_threads_la_SOURCES = \
 	async_handle.h \
 	parallel_work_queue.h \
 	pool.cc \

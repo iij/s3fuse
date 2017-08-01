@@ -15,4 +15,4 @@ tests_SOURCES = \
 	timer.cc \
 	xml.cc
 
-tests_LDADD = ../libs3fuse_base.a ../../services/libs3fuse_services.a -lgtest -lgtest_main $(LDADD)
+tests_LDADD = ../libs3fuse_base.la ../../services/libs3fuse_services.la -lgtest -lgtest_main $(LDADD)

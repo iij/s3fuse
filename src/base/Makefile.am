@@ -1,9 +1,9 @@
 SUBDIRS = .
 DIST_SUBDIRS = $(SUBDIRS) tests
 
-noinst_LTLIBRARIES = libs3fuse_base.a
+noinst_LTLIBRARIES = libs3fuse_base.la
 
-libs3fuse_base_a_SOURCES = \
+libs3fuse_base_la_SOURCES = \
 	config.cc \
 	config.h \
 	config.inc \

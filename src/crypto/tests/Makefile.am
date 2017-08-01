@@ -5,7 +5,7 @@ noinst_PROGRAMS = \
 	tests
 
 passwords_SOURCES = passwords.cc
-passwords_LDADD = ../libs3fuse_crypto.a $(LDADD)
+passwords_LDADD = ../libs3fuse_crypto.la $(LDADD)
 
 tests_SOURCES = \
 	aes_cbc_256.cc \
@@ -23,4 +23,4 @@ tests_SOURCES = \
 	sha256_kat.cc \
 	symmetric_key.cc
 
-tests_LDADD = ../libs3fuse_crypto.a -lgtest -lgtest_main $(LDADD)
+tests_LDADD = ../libs3fuse_crypto.la -lgtest -lgtest_main $(LDADD)

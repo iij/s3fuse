@@ -13,9 +13,9 @@ if WITH_GS
 SUBDIRS += gs
 endif
 
-noinst_LTLIBRARIES = libs3fuse_services.a
+noinst_LTLIBRARIES = libs3fuse_services.la
 
-libs3fuse_services_a_SOURCES = \
+libs3fuse_services_la_SOURCES = \
 	file_transfer.cc \
 	file_transfer.h \
 	impl.cc \

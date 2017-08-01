@@ -5,9 +5,9 @@ if BUILD_TESTS
 SUBDIRS += tests
 endif
 
-noinst_LTLIBRARIES = libs3fuse_crypto.a
+noinst_LTLIBRARIES = libs3fuse_crypto.la
 
-libs3fuse_crypto_a_SOURCES = \
+libs3fuse_crypto_la_SOURCES = \
 	aes_cbc_256.cc \
 	aes_cbc_256.h \
 	aes_ctr_256.cc \

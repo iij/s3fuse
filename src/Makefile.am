@@ -8,27 +8,27 @@ endif
 service_libs =
 
 if WITH_AWS
-service_libs += services/aws/libs3fuse_services_aws.a
+service_libs += services/aws/libs3fuse_services_aws.la
 endif
 
 if WITH_IIJGIO
-service_libs += services/iijgio/libs3fuse_services_iijgio.a
+service_libs += services/iijgio/libs3fuse_services_iijgio.la
 endif
 
 if WITH_GS
-service_libs += services/gs/libs3fuse_services_gs.a
+service_libs += services/gs/libs3fuse_services_gs.la
 endif
 
 # the order of archives in s3fuse_libs matters -- they must be listed such that if A
 # requires symbols provided by B, then A must appear before B
 
 s3fuse_libs = \
-	fs/libs3fuse_fs.a \
+	fs/libs3fuse_fs.la \
 	$(service_libs) \
-	threads/libs3fuse_threads.a \
-	services/libs3fuse_services.a \
-	crypto/libs3fuse_crypto.a \
-	base/libs3fuse_base.a
+	threads/libs3fuse_threads.la \
+	services/libs3fuse_services.la \
+	crypto/libs3fuse_crypto.la \
+	base/libs3fuse_base.la
 
 init_src = \
 	init.cc \

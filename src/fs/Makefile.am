@@ -5,9 +5,9 @@ if BUILD_TESTS
 SUBDIRS += tests
 endif
 	
-noinst_LTLIBRARIES = libs3fuse_fs.a
+noinst_LTLIBRARIES = libs3fuse_fs.la
 
-libs3fuse_fs_a_SOURCES = \
+libs3fuse_fs_la_SOURCES = \
 	bucket_volume_key.cc \
 	bucket_volume_key.h \
 	cache.cc \

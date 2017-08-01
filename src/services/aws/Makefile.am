@@ -1,6 +1,6 @@
-noinst_LTLIBRARIES = libs3fuse_services_aws.a
+noinst_LTLIBRARIES = libs3fuse_services_aws.la
 
-libs3fuse_services_aws_a_SOURCES = \
+libs3fuse_services_aws_la_SOURCES = \
 	file_transfer.cc \
 	file_transfer.h \
 	impl.cc \
