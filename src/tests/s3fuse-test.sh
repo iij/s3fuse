@@ -862,9 +862,14 @@ if [ ! -f /var/tmp/6G ]; then
     echo "create 6G file"
     dd if=/dev/urandom of=/var/tmp/6G bs=$((1024*1024)) count=$((6*1024))
 fi
-d1=$(sha512sum /var/tmp/6G | awk '{ print $1}')
-cp /var/tmp/6G ${DATADIR}/6G
-d2=$(sha512sum ${DATADIR}/6G | awk '{ print $1}')
+d1=$(sha512sum /var/tmp/6G | awk '{ print $1}') > /var/tmp/6G_src_hash
+cp /var/tmp/6G ${DATADIR}/6G || echo "Continue testing even with I / O errors"
+d2=$(sha512sum ${DATADIR}/6G | awk '{ print $1}') > /var/tmp/6G_dst_hash
+
+if [ "$(cat /var/tmp/6G_src_hash)" != "$(cat /var/tmp/6G_dst_hash)" ]; then
+   echo "error ${STEP}"
+   exit 1
+fi
 if [ ! -f ${DATADIR}/6G ]; then
    echo "error ${STEP}"
    exit 1
