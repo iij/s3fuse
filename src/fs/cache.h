@@ -85,7 +85,7 @@ namespace s3
         if (!s_cache_map->find(path, &o))
           return 0;
 
-        if (!o->is_removable())
+        if (o.get() != NULL && !o->is_removable())
           return -EBUSY;
 
         s_cache_map->erase(path);
