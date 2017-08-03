@@ -1,6 +1,6 @@
 %define name s3fuse
-%define version 0.17
-%define release 2
+%define version 0.18
+%define release 1
 
 Summary: FUSE Driver for AWS S3 and Google Storage and IIJ GIO storage and analysis
 Name: %{name}

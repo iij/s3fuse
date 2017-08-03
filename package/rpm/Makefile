@@ -1,11 +1,11 @@
 name=s3fuse
-version=0.17
+version=0.18
 top_dir=$(shell pwd | sed 's/ /\\ /g')
 
 all: clean dist rpm
 
 dist:
-	cd ../../ && make dist
+	cd ../../ && make dist && tar xvf ${name}-${version}*.tar.* && rm ${name}-${version}*.tar.* && mv ${name}-${version}*  ${name}-${version} && tar zcvf ${name}-${version}.tar.gz ${name}-${version}
 
 rpm: ../../$(name)-$(version).tar.gz
 	mkdir -p $(top_dir)/RPMS 
