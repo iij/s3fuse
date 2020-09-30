@@ -72,7 +72,7 @@ int list_reader::read(const request::ptr &req, xml::element_list *keys, xml::ele
   if (!_truncated)
     return 0;
 
-  query = string("prefix=") + request::url_encode(_prefix) + "&marker=" + _marker;
+  query = string("prefix=") + request::url_encode(_prefix) + "&marker=" + request::url_encode(_marker);
 
   if (_group_common_prefixes)
     query += "&delimiter=/";

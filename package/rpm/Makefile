@@ -20,6 +20,6 @@ rpm: ../../$(name)-$(version).tar.gz
 	
 
 clean:
-	rm -rf $(top_dir)/SOURCES $(top_dir)/RPMS $(top_dir)/SRPMS $(top_dir)/BUILD $(top_dir)/BUILDROOT $(top_dir)/SPECS $(top_dir)/INSTALL $(top_dir)/TMP
+	rm -rf $(top_dir)/SOURCES $(top_dir)/RPMS $(top_dir)/SRPMS $(top_dir)/BUILD $(top_dir)/BUILDROOT $(top_dir)/SPECS $(top_dir)/INSTALL $(top_dir)/TMP $(top_dir)/../../s3fuse*
 
 .PHONY: rpm

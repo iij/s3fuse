@@ -434,7 +434,7 @@ rm -rf  ${DATADIR}/*
 STEP="23"; echo "test ${STEP}"  ; date
 for i in $(seq 1 999)
 do
-echo "test" > ${DATADIR}/${i}
+echo "test" > "${DATADIR}/ ${i}"
 done
 if [ "999" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -446,7 +446,7 @@ rm -rf  ${DATADIR}/*
 STEP="24"; echo "test ${STEP}"  ; date
 for i in $(seq 1 1000)
 do
-echo "test" > ${DATADIR}/${i}
+echo "test" > "${DATADIR}/ ${i}"
 done
 if [ "1000" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -458,7 +458,7 @@ rm -rf  ${DATADIR}/*
 STEP="25"; echo "test ${STEP}"  ; date
 for i in $(seq 1 1001)
 do
-echo "test" > ${DATADIR}/${i}
+echo "test" > "${DATADIR}/ ${i}"
 done
 if [ "1001" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -470,7 +470,7 @@ rm -rf  ${DATADIR}/*
 STEP="26"; echo "test ${STEP}"  ; date
 for i in $(seq 1 999)
 do
-mkdir ${DATADIR}/${i}
+mkdir "${DATADIR}/ ${i}"
 done
 if [ "999" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -482,7 +482,7 @@ rm -rf  ${DATADIR}/*
 STEP="27"; echo "test ${STEP}"  ; date
 for i in $(seq 1 1000)
 do
-mkdir ${DATADIR}/${i}
+mkdir "${DATADIR}/ ${i}"
 done
 if [ "1000" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -494,7 +494,7 @@ rm -rf  ${DATADIR}/*
 STEP="28"; echo "test ${STEP}"  ; date
 for i in $(seq 1 1001)
 do
-mkdir ${DATADIR}/${i}
+mkdir "${DATADIR}/ ${i}"
 done
 if [ "1001" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -506,11 +506,11 @@ rm -rf  ${DATADIR}/*
 STEP="29"; echo "test ${STEP}"  ; date
 for i in $(seq 1 500)
 do
-echo "test" > ${DATADIR}/f${i}
+echo "test" > "${DATADIR}/f ${i}"
 done
 for i in $(seq 1 499)
 do
-mkdir ${DATADIR}/d${i}
+mkdir "${DATADIR}/d ${i}"
 done
 if [ "999" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -522,11 +522,11 @@ rm -rf  ${DATADIR}/*
 STEP="30"; echo "test ${STEP}"  ; date
 for i in $(seq 1 500)
 do
-echo "test" > ${DATADIR}/f${i}
+echo "test" > "${DATADIR}/f ${i}"
 done
 for i in $(seq 1 500)
 do
-mkdir ${DATADIR}/d${i}
+mkdir "${DATADIR}/d ${i}"
 done
 if [ "1000" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -538,11 +538,11 @@ rm -rf  ${DATADIR}/*
 STEP="31"; echo "test ${STEP}"  ; date
 for i in $(seq 1 500)
 do
-echo "test" > ${DATADIR}/f${i}
+echo "test" > "${DATADIR}/f ${i}"
 done
 for i in $(seq 1 501)
 do
-mkdir ${DATADIR}/d${i}
+mkdir "${DATADIR}/d ${i}"
 done
 if [ "1001" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -554,11 +554,11 @@ rm -rf  ${DATADIR}/*
 STEP="32"; echo "test ${STEP}" ; date
 for i in $(seq 1 499)
 do
-echo "test" > ${DATADIR}/f${i}
+echo "test" > "${DATADIR}/f ${i}"
 done
 for i in $(seq 1 500)
 do
-mkdir ${DATADIR}/d${i}
+mkdir "${DATADIR}/d ${i}"
 done
 if [ "999" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -570,11 +570,11 @@ rm -rf  ${DATADIR}/*
 STEP="33"; echo "test ${STEP}" ; date
 for i in $(seq 1 501)
 do
-echo "test" > ${DATADIR}/f${i}
+echo "test" > "${DATADIR}/f ${i}"
 done
 for i in $(seq 1 500)
 do
-mkdir ${DATADIR}/d${i}
+mkdir "${DATADIR}/d ${i}"
 done
 if [ "1001" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
@@ -586,11 +586,11 @@ rm -rf  ${DATADIR}/*
 STEP="34"; echo "test ${STEP}" ; date
 for i in $(seq 1 1001)
 do
-echo "test" > ${DATADIR}/f${i}
+echo "test" > "${DATADIR}/f ${i}"
 done
 for i in $(seq 1 1001)
 do
-mkdir ${DATADIR}/d${i}
+mkdir "${DATADIR}/d ${i}"
 done
 if [ "2002" != $(ls ${DATADIR} | wc -l) ]; then
     echo "error ${STEP}"
